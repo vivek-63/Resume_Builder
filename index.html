@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Resume Builder</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- html2canvas and jsPDF libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                        <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                </div>
+                <div>
+                    <h1>Professional Resume Builder</h1>
+                    <p class="subtitle">Design a premium, industry-standard resume in real time</p>
+                </div>
+            </div>
+
+            <div class="actions-area">
+                <!-- Theme Toggle -->
+                <button type="button" id="theme-toggle" class="btn btn-secondary btn-icon" title="Toggle Theme"
+                    aria-label="Toggle Theme">
+                    <svg id="theme-icon-sun" class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4" />
+                        <path d="M12 2v2" />
+                        <path d="M12 20v2" />
+                        <path d="m4.93 4.93 1.41 1.41" />
+                        <path d="m17.66 17.66 1.41 1.41" />
+                        <path d="M2 12h2" />
+                        <path d="M20 12h2" />
+                        <path d="m6.34 17.66-1.41 1.41" />
+                        <path d="m19.07 4.93-1.41 1.41" />
+                    </svg>
+                    <svg id="theme-icon-moon" class="icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                    </svg>
+                </button>
+
+                <!-- Sample Resume Autofill -->
+                <button type="button" id="btn-sample" class="btn btn-outline">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                    Load Sample
+                </button>
+
+                <!-- Clear Form -->
+                <button type="button" id="btn-clear" class="btn btn-danger-outline">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        <line x1="10" y1="11" x2="10" y2="17" />
+                        <line x1="14" y1="11" x2="14" y2="17" />
+                    </svg>
+                    Clear Form
+                </button>
+
+                <!-- Download PDF -->
+                <button type="button" id="btn-download" class="btn btn-primary">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Download Resume PDF
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Left Panel (Inputs) -->
+            <section class="editor-panel">
+                <!-- Personal Info Section -->
+                <div class="card" id="card-personal">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <h2>Personal Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="input-fullname">Full Name <span class="required">*</span></label>
+                                <input type="text" id="input-fullname" placeholder="John Doe" required>
+                                <span class="error-msg" id="error-fullname">Name is required</span>
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="input-email">Email Address <span class="required">*</span></label>
+                                <input type="email" id="input-email" placeholder="john.doe@example.com" required>
+                                <span class="error-msg" id="error-email">Valid email is required</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="input-phone">Phone Number</label>
+                                <input type="tel" id="input-phone" placeholder="+1 (555) 019-2834">
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="input-location">Location</label>
+                                <input type="text" id="input-location" placeholder="New York, NY">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="input-linkedin">LinkedIn Profile Link</label>
+                                <input type="url" id="input-linkedin" placeholder="linkedin.com/in/johndoe">
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="input-github">GitHub Profile Link</label>
+                                <input type="url" id="input-github" placeholder="github.com/johndoe">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-summary">Professional Summary</label>
+                            <textarea id="input-summary" rows="3"
+                                placeholder="Briefly describe your career achievements, skills, and goals..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Profile Photo</label>
+                            <div class="photo-upload-container">
+                                <div class="photo-preview-box" id="upload-preview-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" class="placeholder-svg">
+                                        <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                                        <circle cx="9" cy="9" r="2" />
+                                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                    </svg>
+                                    <img id="upload-preview-img" src="" alt="Profile preview" class="hidden">
+                                </div>
+                                <div class="upload-controls">
+                                    <label for="input-photo" class="btn btn-outline btn-sm">
+                                        Choose Image
+                                    </label>
+                                    <input type="file" id="input-photo" accept="image/png, image/jpeg, image/jpg"
+                                        class="hidden">
+                                    <span class="file-info" id="file-info-label">Supports PNG, JPG, JPEG</span>
+                                    <button type="button" id="btn-remove-photo"
+                                        class="btn btn-danger-outline btn-sm hidden">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Section -->
+                <div class="card" id="card-education">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+                                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                            </svg>
+                        </div>
+                        <h2>Education</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="education-list" class="dynamic-list">
+                            <!-- Education items added here -->
+                        </div>
+                        <button type="button" id="btn-add-education" class="btn btn-outline btn-full">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Add Education
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Experience Section -->
+                <div class="card" id="card-experience">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                            </svg>
+                        </div>
+                        <h2>Work Experience</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="experience-list" class="dynamic-list">
+                            <!-- Experience items added here -->
+                        </div>
+                        <button type="button" id="btn-add-experience" class="btn btn-outline btn-full">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Add Experience
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Projects Section -->
+                <div class="card" id="card-projects">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                                <path d="m9 12 2 2 4-4" />
+                            </svg>
+                        </div>
+                        <h2>Projects</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="projects-list" class="dynamic-list">
+                            <!-- Project items added here -->
+                        </div>
+                        <button type="button" id="btn-add-project" class="btn btn-outline btn-full">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Add Project
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="card" id="card-skills">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                            </svg>
+                        </div>
+                        <h2>Skills</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="skills-input-wrapper">
+                            <input type="text" id="input-skill"
+                                placeholder="Type a skill and press Enter or add button...">
+                            <button type="button" id="btn-add-skill" class="btn btn-secondary">Add</button>
+                        </div>
+                        <div class="suggested-skills">
+                            <span class="suggestion-label">Suggestions:</span>
+                            <div class="suggestion-tags" id="suggestion-tags">
+                                <span class="badge badge-suggest" data-skill="Java">Java</span>
+                                <span class="badge badge-suggest" data-skill="JavaScript">JavaScript</span>
+                                <span class="badge badge-suggest" data-skill="Node.js">Node.js</span>
+                                <span class="badge badge-suggest" data-skill="MongoDB">MongoDB</span>
+                                <span class="badge badge-suggest" data-skill="Express">Express</span>
+                                <span class="badge badge-suggest" data-skill="React">React</span>
+                                <span class="badge badge-suggest" data-skill="SQL">SQL</span>
+                            </div>
+                        </div>
+                        <div class="skills-tags-container" id="form-skills-container">
+                            <!-- Skill tags will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel (Live Preview) -->
+            <section class="preview-panel">
+                <div class="preview-control-bar">
+                    <div class="preview-title">
+                        <span>Live Resume Preview</span>
+                        <div class="live-dot"></div>
+                    </div>
+                    <span class="preview-help">A4 Paper Dimensions (auto-scaled to fit screen)</span>
+                </div>
+
+                <div class="preview-wrapper">
+                    <!-- The actual A4 Resume Sheet -->
+                    <div id="resume-sheet" class="resume-sheet">
+                        <!-- Left Sidebar -->
+                        <div class="resume-sidebar">
+                            <!-- Profile Photo Block -->
+                            <div class="resume-photo-container">
+                                <div class="resume-photo" id="resume-photo-box">
+                                    <!-- Default letter avatar or SVG if no photo -->
+                                    <span id="resume-avatar-letter">JD</span>
+                                    <img id="resume-photo-img" src="" alt="Profile Image" class="hidden">
+                                </div>
+                            </div>
+
+                            <!-- Contact Details -->
+                            <div class="resume-section-sidebar" id="preview-contact-section">
+                                <h3 class="sidebar-title">Contact</h3>
+                                <ul class="contact-list">
+                                    <li id="p-contact-email-item" class="hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="icon-s">
+                                            <rect width="20" height="16" x="2" y="4" rx="2" />
+                                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                        </svg>
+                                        <span id="p-contact-email">john.doe@example.com</span>
+                                    </li>
+                                    <li id="p-contact-phone-item" class="hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="icon-s">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                        </svg>
+                                        <span id="p-contact-phone">+1 (555) 019-2834</span>
+                                    </li>
+                                    <li id="p-contact-location-item" class="hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="icon-s">
+                                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                            <circle cx="12" cy="10" r="3" />
+                                        </svg>
+                                        <span id="p-contact-location">New York, NY</span>
+                                    </li>
+                                    <li id="p-contact-linkedin-item" class="hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="icon-s">
+                                            <path
+                                                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                            <rect width="4" height="12" x="2" y="9" />
+                                            <circle cx="4" cy="4" r="2" />
+                                        </svg>
+                                        <span id="p-contact-linkedin">linkedin.com/in/johndoe</span>
+                                    </li>
+                                    <li id="p-contact-github-item" class="hidden">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" class="icon-s">
+                                            <path
+                                                d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                                            <path d="M9 18c-4.51 2-5-2-7-2" />
+                                        </svg>
+                                        <span id="p-contact-github">github.com/johndoe</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Skills -->
+                            <div class="resume-section-sidebar" id="preview-skills-section">
+                                <h3 class="sidebar-title">Skills</h3>
+                                <div class="skills-preview-container" id="preview-skills-container">
+                                    <!-- Skill badges in preview -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Body -->
+                        <div class="resume-main">
+                            <!-- Name / Title -->
+                            <div class="resume-header">
+                                <h1 id="p-fullname">John Doe</h1>
+                                <div class="header-divider"></div>
+                            </div>
+
+                            <!-- Summary -->
+                            <div class="resume-section" id="preview-summary-section">
+                                <h2 class="section-title">Professional Summary</h2>
+                                <p id="p-summary">A motivated and detailed professional developer ready to deliver
+                                    premium grade solutions...</p>
+                            </div>
+
+                            <!-- Experience -->
+                            <div class="resume-section" id="preview-experience-section">
+                                <h2 class="section-title">Work Experience</h2>
+                                <div id="preview-experience-list" class="preview-item-list">
+                                    <!-- Experience items -->
+                                </div>
+                            </div>
+
+                            <!-- Projects -->
+                            <div class="resume-section" id="preview-projects-section">
+                                <h2 class="section-title">Projects</h2>
+                                <div id="preview-projects-list" class="preview-item-list">
+                                    <!-- Projects items -->
+                                </div>
+                            </div>
+
+                            <!-- Education -->
+                            <div class="resume-section" id="preview-education-section">
+                                <h2 class="section-title">Education</h2>
+                                <div id="preview-education-list" class="preview-item-list">
+                                    <!-- Education items -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Digital Heroes Bottom Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="developer-info">
+                    <span class="footer-label">Developer:</span>
+                    <span class="footer-val name">Vivek Mishra</span>
+                    <span class="footer-separator">|</span>
+                    <span class="footer-label">Email:</span>
+                    <span class="footer-val email">6306vivekmishra@gmail.com</span>
+                </div>
+                <a href="https://digitalheroesco.com" target="_blank" rel="noopener noreferrer"
+                    class="btn btn-special btn-glow" id="btn-digital-heroes">
+                    Built for Digital Heroes
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" class="icon-xs">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Main JavaScript File -->
+    <script src="script.js"></script>
+</body>
+
+</html>
